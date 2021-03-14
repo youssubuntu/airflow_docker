@@ -28,7 +28,7 @@ jobs:
         run: pwd && ls 
 
       - name: Build image
-        run: docker-compose -f dev-docker-compose.yml build
+        run: docker-compose -f dev.docker-compose.yml build
 
       - name: Log into GitHub Container Registry
         env: 
@@ -38,4 +38,4 @@ jobs:
 
       - name: Push image to GitHub Container Registry
         run: |
-          docker-compose -f dev-docker-compose.yml push
+          docker-compose -f dev.docker-compose.yml push
