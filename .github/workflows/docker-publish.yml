@@ -24,8 +24,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: list element 
+        run: pwd && ls 
+
       - name: Build image
-        run: cd ../.. && docker-compose -f dev-docker-compose.yml build
+        # working-directory: 
+        run: docker-compose -f dev-docker-compose.yml build
 
       - name: Log into GitHub Container Registry
         env: 
@@ -35,4 +39,4 @@ jobs:
 
       - name: Push image to GitHub Container Registry
         run: |
-          cd ../.. && docker-compose -f dev-docker-compose.yml push
+          docker-compose -f dev-docker-compose.yml push
