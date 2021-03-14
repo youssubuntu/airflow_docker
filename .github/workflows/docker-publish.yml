@@ -23,6 +23,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      
+      - name: list element
+        run: pwd && ls 
 
       - name: Build image
         run: docker-compose -f dev-docker-compose.yml build
