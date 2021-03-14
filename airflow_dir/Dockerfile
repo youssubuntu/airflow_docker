@@ -5,7 +5,7 @@
 # SOURCE: https://github.com/puckel/docker-airflow
 
 # FROM python:3.7-slim-buster 
-FROM arm64v8/python  
+FROM arm64v8/python:3.7.10-buster
 LABEL maintainer="Puckel_"
 
 # Never prompt the user for choices on installation/configuration of packages
