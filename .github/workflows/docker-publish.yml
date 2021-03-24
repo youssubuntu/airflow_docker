@@ -11,16 +11,14 @@ on:
       - v*
 
 
+env:      
+  # DOCKER_REGISTRY: kemansel.azurecr.io      
+  DOCKER_IMAGE: youssubuntu/airflow:latest      
+  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}  
+  DOCKER_TARGET_PLATFORM: linux/arm/v7
 
 jobs:
-  build:
-     env:      
-      # DOCKER_REGISTRY: kemansel.azurecr.io      
-      DOCKER_IMAGE: youssubuntu/airflow:latest      
-      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}  
-      DOCKER_TARGET_PLATFORM: linux/arm/v7
-
   # Push image to GitHub Packages.
   # See also https://docs.docker.com/docker-hub/builds/
   
