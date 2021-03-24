@@ -13,9 +13,17 @@ on:
 
 
 jobs:
+  build:
+     env:      
+      # DOCKER_REGISTRY: kemansel.azurecr.io      
+      DOCKER_IMAGE: youssubuntu/airflow:latest      
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}  
+      DOCKER_TARGET_PLATFORM: linux/arm/v7
 
   # Push image to GitHub Packages.
   # See also https://docs.docker.com/docker-hub/builds/
+  
   push:
 
     runs-on: ubuntu-latest
@@ -27,15 +35,45 @@ jobs:
       - name: list element
         run: pwd && ls 
 
-      - name: Build image
-        run: docker-compose -f dev.docker-compose.yml build
+      # - name: Build image
+      #   run: docker-compose -f dev.docker-compose.yml build
 
       - name: Log into GitHub Container Registry
-        env: 
-          docker_login: ${{ secrets.DOCKER_USERNAME }}
-          docker_password: ${{ secrets.DOCKER_PASSWORD }} 
-        run: docker login -u $docker_login --password $docker_password
+        # env: 
+        #   docker_login: ${{ secrets.DOCKER_USERNAME }}
+        #   docker_password: ${{ secrets.DOCKER_PASSWORD }} 
+        run: docker login -u $DOCKER_USERNAME --password $DOCKER_PASSWORD
+      
+      # - name: Push image to GitHub Container Registry
+      #   run: |
+      #     docker-compose -f dev.docker-compose.yml push
 
-      - name: Push image to GitHub Container Registry
-        run: |
-          docker-compose -f dev.docker-compose.yml push
+      - name: Set up Docker Buildx      
+        uses: crazy-max/ghaction-docker-buildx@v1      
+        with:        
+          version: latest
+
+      - name: Prepare      
+        if: success()      
+        id: prepare      
+        run: |        
+          echo ::set-output name=docker_platform::${DOCKER_TARGET_PLATFORM}        
+          echo ::set-output name=docker_image::${DOCKER_IMAGE}        
+          echo ::set-output name=version::${GITHUB_RUN_NUMBER}  
+
+      - name: Docker Login      
+        if: success()      
+        run: |        
+          echo "${DOCKER_PASSWORD}" | docker login --username "${DOCKER_USERNAME}" --password-stdin          
+
+      - name: Run Buildx (push image)      
+        if: success()      
+        run: |        
+          docker buildx build \
+            --platform ${{ steps.prepare.outputs.docker_platform }} \        
+            --tag ${{ steps.prepare.outputs.docker_image }}:${{ steps.prepare.outputs.version }} \        
+            --file ./Dockerfile \        
+            --output type=image,push=true .
+
+
+        
