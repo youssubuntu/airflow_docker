@@ -73,6 +73,7 @@ jobs:
             --file ./Dockerfile \        
         #--output type=image,push=true .
             --push 
+            
 
 
         
