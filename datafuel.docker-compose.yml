@@ -17,7 +17,7 @@ services:
         #     - ./pgdata:/var/lib/postgresql/data/pgdata
 
     webserver:
-        image: datafuel/airflow:latest
+        image: youssubuntu/airflow:latest
         container_name: webserver
         restart: always
         depends_on:
@@ -56,7 +56,7 @@ services:
         #     retries: 3
 
     flower:
-        image: datafuel/airflow:latest
+        image: youssubuntu/airflow:latest
         container_name: flower
         restart: always
         depends_on:
@@ -73,7 +73,7 @@ services:
         command: airflow celery flower
 
     scheduler:
-        image: datafuel/airflow:latest
+        image: youssubuntu/airflow:latest
         container_name: scheduler
         restart: always
         depends_on:
@@ -101,7 +101,7 @@ services:
         
 
     worker:
-        image: datafuel/airflow:latest
+        image: youssubuntu/airflow:latest
         container_name: worker
         restart: always
         depends_on:
