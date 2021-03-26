@@ -75,6 +75,7 @@ jobs:
             --tag ${{ steps.prepare.outputs.docker_image }}:${{ steps.prepare.outputs.version }} \        
             --file ./airflow_dir/Dockerfile \        
             --output=type=image
+            --push
 
         #--output type=image,push=true .
 
